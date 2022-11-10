@@ -5,6 +5,7 @@ from player import *
 from enemy import Enemy
 from Time import Timer
 from set import *
+from item import *
 class Level :
     def __init__(self) :
         self.time=1
@@ -27,7 +28,8 @@ class Level :
         #self.en=Enemy((-10,-10),all_sprites,0)
         playerlist.append(self.player)
         #enemylist.append(self.en)
-        self.point=Point((0,0),all_sprites)
+        #self.item= Item((400,50),all_sprites,0)
+        #self.point=playerfile((400,200),all_sprites,0)
         #self.all_sprites.empty()
     def run(self,dt):
         self.display_surface.blit(self.image0,(0,0))#(pygame.image.load('./bg2.png'))
@@ -43,4 +45,4 @@ class Level :
         else :
             self.time=1
             self.creatEnemy((0,0),0)
-            self.creatEnemy((800,0),1)
+            self.creatEnemy((800,0),2)

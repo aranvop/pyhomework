@@ -1,21 +1,64 @@
 import pygame
 from set import *
 from support import *
+from item import *
+from math import atan2 , degrees , pi
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self,filename,pos,group:pygame.sprite.Group,num) :
+    def __init__(self,pos,group:pygame.sprite.Group,num) :
         super().__init__(group)
-        self.image=pygame.image.load(filename).convert_alpha()
-        #self.image=pygame.transform.rotozoom(self.image,50,1)
         self.pos=pygame.Vector2(pos)
+        self.num=num
         self.direction=pygame.Vector2()
+        self.selectType()
+        self.import_assets()
+        self.seldir()
+        self.frame_index=0
+        self.image=self.animations[self.type][self.frame_index]
+        self.image1=self.animations[self.type][self.frame_index]
+        #self.image=pygame.image.load(filename).convert_alpha()
+        #self.image=pygame.transform.rotozoom(self.image,50,1)
+        self.image=pygame.transform.rotozoom(self.image1,-self.degs, 1)
+
+        
         self.speed=1500
         self.rect=self.image.get_rect(center=pos)        #self.direction=pygame.math.Vector2(0,1)
-        self.direction.y=-1
-        self.direction.x=0
+
         self.ishit=False
         #self.angle=0
     #def display():
+    def selectType(self):
+        if self.num==0:
+            self.type="normal"
+            self.direction.y=-1
+            self.direction.x=0
+        elif self.num==1:
+            self.type='zhuizong'
+            try:  
+                self.direction=enemylist[0].pos-self.pos
+            except:
+                self.direction.y=-1
+                self.direction.x=0
+                
+    def seldir(self):
+        #if self.num==1:
+            x=self.direction.x
+            y=self.direction.y
+            rad=atan2(y,x)
+            rad%=2*pi
+            self.degs=degrees(rad)
     def move(self,dt):
+
+        if self.num==1:
+            try:  
+                self.direction=enemylist[0].pos-self.pos
+            except:
+                pass
+            x=self.direction.x
+            y=self.direction.y
+            rad=atan2(y,x)
+            rad%=2*pi
+            degs=degrees(rad)
+            self.image=pygame.transform.rotozoom(self.image1,-degs, 1)
         #self.pos+=self.direction*self.speed*dt
         if self.direction.magnitude()>0:
             self.direction=self.direction.normalize()
@@ -25,18 +68,24 @@ class Bullet(pygame.sprite.Sprite):
     def hit(self,enemylist):
         #print(enemylist)
         num=len(enemylist)
-        i=0
         for i in enemylist:
             if self.pos.distance_squared_to(i.pos)<900:
                 self.ishit=True
                 i.health-=10
                 if i.health<0:
+                    i.creatItem()
                     enemylist.remove(i)
                     i.kill()
         if self.ishit==True:
             all_sprites.remove(self)   
             del self 
-
+    def import_assets(self):
+        self.animations={
+            self.type:[]}
+        for animation in self.animations.keys():
+            full_path ='./bullet/'+animation
+            self.animations[animation]=import_folder(full_path)
+            #键盘输入
         # while (i<num):
         #     if self.pos.distance_squared_to(enemylist[i].pos)<400:
         #         enemylist[i].health-=10
