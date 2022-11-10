@@ -1,6 +1,7 @@
 import pygame ,sys
 from player import Player
 from level import Level
+from set import*
 WIN_wid=800
 WIN_hei=600
 
@@ -47,7 +48,8 @@ class Game:
         self.screen=pygame.display.set_mode((800,600))
         self.clock=pygame.time.Clock()
         self.level=Level()
-
+        pygame.mixer.music.load(mupath)
+        pygame.mixer.music.play(start=0)
     def run(self):
         while True:
             for event in pygame.event.get():

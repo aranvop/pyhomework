@@ -122,13 +122,18 @@ class enemyBullet(pygame.sprite.Sprite):
         self.speed=300
         self.angle=0
         self.rect=self.image.get_rect(center=pos)        #self.direction=pygame.math.Vector2(0,1)
-        self.direction.y=1
-        self.direction.x=1
+        # self.direction.y=1
+        # self.direction.x=1
     def selectType(self,num):
         if num==0:
             self.mytype="./bullet/star/"
+            self.hitdis=49
         elif num==1:
+            self.mytype="./bullet/yuan/"
+            self.hitdis=49
+        elif num==2:
             self.mytype="./bullet/bigbul/"
+            self.hitdis=400
     def move(self,dt):
         if self.direction.magnitude()>0:
             self.direction=self.direction.normalize()
@@ -144,10 +149,10 @@ class enemyBullet(pygame.sprite.Sprite):
     def hit(self,playerlist):
         #global playerpos
         global playerhealth
-        if self.pos.distance_squared_to(playerlist[0].pos)<49:
+        if self.pos.distance_squared_to(playerlist[0].pos)<self.hitdis:
             #print(playerpos)
             playerlist[0].health-=20
-            print(playerlist[0].health)
+            print('youdead')
             all_sprites.remove(self)
             del self
 
@@ -157,17 +162,26 @@ class enemyBullet(pygame.sprite.Sprite):
             del self
     def animate(self,dt):
         #self.image=pygame.transform.rotozoom(self.image,30,1)
-        self.angle-=2
+        # self.angle-=2
         self.frame_index+=2*dt
         if  self.frame_index>=len(self.animations[self.mytype]):
             self.frame_index=0
         self.image=self.animations[self.mytype][int(self.frame_index)]
-        self.image=pygame.transform.rotozoom(self.image,self.angle,1)
+        # self.image=pygame.transform.rotozoom(self.image,self.angle,1)
     def update(self,dt):
         self.move(dt)
         self.hit(playerlist)
         self.tranBound()
         self.animate(dt)
+        self.rotate()
+    def rotate(self):
+        self.angle-=2
+        """Rotate the image of the sprite around its center."""
+        # `rotozoom` usually looks nicer than `rotate`. Pygame's rotation
+        # functions return new images and don't modify the originals.
+        self.image = pygame.transform.rotozoom(self.image, self.angle, 1)
+        # Create a new rect with the center of the old rect.
+        self.rect = self.image.get_rect(center=self.rect.center)
 
 
 

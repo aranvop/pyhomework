@@ -6,10 +6,12 @@ dt=clock.tick(60)/1000
 enemylist=[]
 playerlist=[]
 power=200
+rang1=20
 ifpowerChange=False
 score=0
 playerhealth = 10.0
 playerpos=(400,600)
+mupath='./music/1.mp3'
 # enemytype={
 #     1:'1',
 #     2:'2',

@@ -16,10 +16,13 @@ class Player(pygame.sprite.Sprite):
         #移动
         self.direction=pygame.math.Vector2()
         self.pos=pygame.Vector2(self.rect.center)
-        self.bulnum=1
+        self.bulnum=0
         self.health=10
+        self.xdis=30
         #self.health=10
         self.yyy1=playerfile(pygame.Vector2(self.pos.x,self.pos.y+20),all_sprites,0)
+        self.yyy2=playerfile(pygame.Vector2(self.pos.x-self.xdis,self.pos.y),all_sprites,0)
+        self.yyy3=playerfile(pygame.Vector2(self.pos.x+self.xdis,self.pos.y),all_sprites,0)
         #动画
     def animate(self):
         if  self.frame_index>=len(self.animations[self.status]):
@@ -37,13 +40,16 @@ class Player(pygame.sprite.Sprite):
         #发射弹幕
     def shoot(self,dt):
         pos0=pygame.Vector2(self.pos)
-        pos0.x-=8
-        pos0.y-=10
+        pos0.x+=self.xdis*2/3
+        #pos0.x-=8
+        #pos0.y-=10
         pos1=pygame.Vector2(self.pos)
-        pos1.x+=8
-        pos1.y-=10
+        #pos1.x+=8
+        #pos1.y-=10
+        pos1.x-=self.xdis*2/3
         newBullet=Bullet(pos0,self.group,0)
         newBullet1=Bullet(pos1,self.group,0)
+        newBullet1=Bullet(self.pos,self.group,0)
 
         #self.bulletlist.append(Bullet('./bullet/0.png',pos0,all_sprites))
         #self.bulletlist.append(Bullet('./bullet/0.png',pos1,all_sprites))
@@ -56,6 +62,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.center=self.pos
 
     def update(self,dt) :
+        self.yyy1.pos=(self.pos.x,self.pos.y+self.xdis)
+        self.yyy2.pos=(self.pos.x-self.xdis,self.pos.y)
+        self.yyy3.pos=(self.pos.x+self.xdis,self.pos.y)
         self.input(dt)
         self.move(dt)
         self.animate()
@@ -115,15 +124,18 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x=0
             self.status='up'
-
-
         if keys[pygame.K_LSHIFT]:
+            self.xdis=20
             self.speed=180
         else :
+            self.xdis=30
             self.speed=360
         if keys[pygame.K_z]:
             #print('z')
+            
             if self.yyy1.bulnum==12:
+                self.yyy3.shoot(dt)
+                self.yyy2.shoot(dt)
                 self.yyy1.shoot(dt)
                 self.yyy1.bulnum=0
             else:
@@ -134,6 +146,7 @@ class Player(pygame.sprite.Sprite):
             else :
                 self.bulnum+=1
         else :
+            
             pass
 
 class playerfile(pygame.sprite.Sprite):
@@ -188,7 +201,7 @@ class playerfile(pygame.sprite.Sprite):
         self.rect.center = pivot
         #return image, rect   
     def update(self,dt):
-        self.pos=pygame.Vector2(playerlist[0].pos.x,playerlist[0].pos.y+30)
+        #self.pos=pygame.Vector2(playerlist[0].pos.x,playerlist[0].pos.y)
         self.rect.center=self.pos
         self.animate(dt)
         self.rotate()

@@ -15,6 +15,9 @@ class Level :
         self.image1=pygame.image.load('./bg2.png')
         self.image1=pygame.transform.scale(self.image1,(800,600),)
         self.image0=pygame.image.load('./moon.png')
+        self.lenum=0
+        self.enemynum=0
+        self.waitTime=1
         #self.image2=pygame.image.load('./player/point.png')
     #创建敌人
     def creatEnemy(self,pos,num):
@@ -39,10 +42,53 @@ class Level :
 
         self.all_sprites.update(dt)
         all_sprites.update(dt)
-        if self.time>0:
-            #print(self.time)
-            self.time-=dt
-        else :
-            self.time=1
-            self.creatEnemy((0,0),0)
-            self.creatEnemy((800,0),2)
+        if self.waitTime>0:
+            self.waitTime-=dt
+        elif self.lenum==0 :
+            if self.enemynum<60:
+                if self.time>0:
+                    #print(self.time)
+                    self.time-=dt
+                else :
+                    self.time=0.5
+                    self.creatEnemy((0,0),0)
+                    self.creatEnemy((800,0),1)
+                    self.enemynum+=2
+            else:
+                self.lenum=1
+                self.waitTime=2
+                self.enemynum=10
+
+
+        #第二部分
+        elif self.lenum==1:
+
+            if self.enemynum<20:
+                if self.enemynum%3!=0:
+                    if self.time>0:
+                        #print(self.time)
+                        self.time-=dt
+                    else :
+                        self.time=2
+                        #self.creatEnemy((0,0),0)
+                        self.creatEnemy((400,0),3)
+                        self.enemynum+=1
+                else:
+                    if self.time>0:
+                        #print(self.time)
+                        self.time-=dt
+                    elif len(enemylist)==0 :
+                        self.time=2
+                        #self.creatEnemy((0,0),0)
+                        self.creatEnemy((500,0),2)
+                        self.creatEnemy((100,0),2)
+                        self.enemynum+=1
+            else:
+                self.lenum=2
+                self.waitTime=5
+                self.enemynum=10
+        elif self.lenum==2 and len(enemylist)==0:
+            exit()
+        # elif self.enemynum>=20:
+        #     self.waitTime=2
+        
