@@ -99,7 +99,7 @@ class Bullet(pygame.sprite.Sprite):
         #     i+=1
         #判断越界
     def tranBound(self):
-        if self.pos.y<0 or self.pos.y>600 or self.pos.x<0 or self.pos.x>800:
+        if self.pos.y<0 or self.pos.y>750 or self.pos.x<0 or self.pos.x>700:
             all_sprites.remove(self)
             del self
     def update(self,dt):
@@ -114,6 +114,7 @@ class enemyBullet(pygame.sprite.Sprite):
     def __init__(self,pos,group:pygame.sprite.Group,num) :
         super().__init__(group)
         self.frame_index=0
+        self.num=num
         self.selectType(num)
         self.import_assets()
         self.image=self.animations[self.mytype][self.frame_index]
@@ -134,6 +135,9 @@ class enemyBullet(pygame.sprite.Sprite):
         elif num==2:
             self.mytype="./bullet/bigbul/"
             self.hitdis=400
+        elif num==3:
+            self.mytype="./bullet/crowb/"
+            self.hitdis=25         
     def move(self,dt):
         if self.direction.magnitude()>0:
             self.direction=self.direction.normalize()
@@ -152,12 +156,12 @@ class enemyBullet(pygame.sprite.Sprite):
         if self.pos.distance_squared_to(playerlist[0].pos)<self.hitdis:
             #print(playerpos)
             playerlist[0].health-=20
-            print('youdead')
-            all_sprites.remove(self)
-            del self
+            # print('youdead')
+            # all_sprites.remove(self)
+            # del self
 
     def tranBound(self):
-        if self.pos.y<0 or self.pos.y>600 or self.pos.x<0 or self.pos.x>800:
+        if self.pos.y<50 or self.pos.y>750 or self.pos.x<0 or self.pos.x>700:
             all_sprites.remove(self)
             del self
     def animate(self,dt):
@@ -173,7 +177,8 @@ class enemyBullet(pygame.sprite.Sprite):
         self.hit(playerlist)
         self.tranBound()
         self.animate(dt)
-        self.rotate()
+        if self.num==0:
+            self.rotate()
     def rotate(self):
         self.angle-=2
         """Rotate the image of the sprite around its center."""

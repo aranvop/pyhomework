@@ -47,10 +47,11 @@ class Item(pygame.sprite.Sprite):
         if self.num==0:
             global power
             power+=1
+            playerlist[0].power+=1
             print (power/100 )
         elif self.num==1:
-            global score
-            score +=10
+            #global score
+             playerlist[0].score +=10
     def move(self,dt):
         if self.pos.distance_squared_to(playerlist[0].pos)<2500:
             self.direction=playerlist[0].pos-self.pos
@@ -61,7 +62,7 @@ class Item(pygame.sprite.Sprite):
         self.pos+=self.direction*self.speed*dt
         self.rect.center=self.pos
     def tranBound(self):
-        if self.pos.y<0 or self.pos.y>600 or self.pos.x<0 or self.pos.x>800:
+        if self.pos.y<50 or self.pos.y>750 or self.pos.x<0 or self.pos.x>700:
             all_sprites.remove(self)
             del self
     def update(self,dt):

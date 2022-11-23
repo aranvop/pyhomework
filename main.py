@@ -5,9 +5,28 @@ from set import*
 WIN_wid=800
 WIN_hei=600
 
-
-
-
+class Game:
+    def __init__(self) :
+        pygame.init()
+        self.screen=pygame.display.set_mode((1024,768))
+        self.clock=pygame.time.Clock()
+        self.level=Level()
+        pygame.mixer.music.load(mupath)
+        pygame.mixer.music.play(start=0)
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            dt=self.clock.tick(60)/1000
+            self.level.run(dt)
+            if self.level.player.health<0:
+                sys.exit()
+            pygame.display.update()
+if __name__=='__main__':
+    game=Game()
+    game.run()
 # def main():
 #     #pl1=Player()
 #     #pygame.transform.smoothscale(pygame.image.load('./resource/player/pl00/floatGun.png'),(120,24))
@@ -41,28 +60,3 @@ WIN_hei=600
 #     print('yes')
 # if  __name__== '__main__':
 #    main()
-
-class Game:
-    def __init__(self) :
-        pygame.init()
-        self.screen=pygame.display.set_mode((800,600))
-        self.clock=pygame.time.Clock()
-        self.level=Level()
-        pygame.mixer.music.load(mupath)
-        pygame.mixer.music.play(start=0)
-    def run(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type==pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-            dt=self.clock.tick(60)/1000
-            self.level.run(dt)
-            if self.level.player.health<0:
-                sys.exit()
-            pygame.display.update()
-if __name__=='__main__':
-    game=Game()
-    game.run()
-
-     

@@ -6,6 +6,8 @@ from support import *
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos,group) -> None:
         super().__init__(group)
+        self.score=0
+        self.power=200
         self.group=group
         self.import_assets()
         self.status='right'
@@ -95,13 +97,13 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_UP]:
             self.status='up'
             #不能超过边界：
-            if self.pos.y >10:
+            if self.pos.y >60:
                 self.direction.y=-1
             else :
                 self.direction.y=0
         elif keys[pygame.K_DOWN]:
             self.status='down'
-            if self.pos.y <590:
+            if self.pos.y <740:
                 self.direction.y=1
             else :
                 self.direction.y=0
@@ -110,7 +112,7 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_RIGHT]:
             self.status='right'
-            if self.pos.x < 790:
+            if self.pos.x < 690:
                 self.direction.x=1
             else :
                 self.direction.x=0
@@ -193,13 +195,7 @@ class playerfile(pygame.sprite.Sprite):
         #pos0.x-=8
         pos0.y-=10
         newBullet=Bullet(pos0,all_sprites,1)
-        #newBullet1=Bullet(pos1,self.group,1)
-    def rotatePivoted(self,pivot):
-        # rotate the leg image around the pivot
-        self.image = pygame.transform.rotate(self.image, self.angle)
-        self.rect = self.image.get_rect()
-        self.rect.center = pivot
-        #return image, rect   
+        #newBullet1=Bullet(pos1,self.group,1)   
     def update(self,dt):
         #self.pos=pygame.Vector2(playerlist[0].pos.x,playerlist[0].pos.y)
         self.rect.center=self.pos
